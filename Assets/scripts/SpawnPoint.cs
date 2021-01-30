@@ -5,7 +5,7 @@ public class SpawnPoint : MonoBehaviour {
 
 
     public GameManager GM;
-    GameObject spawnObject;
+    public GameObject spawnObject;
     private GameManager.Teams team = GameManager.Teams.TEAM1;
 
     public int spawnCount = 0;
@@ -26,8 +26,8 @@ public class SpawnPoint : MonoBehaviour {
 
 
     public void SpawnObject (){
-        spawnObject = (GameObject)Resources.Load("Enemy");
-        GameObject go = Instantiate (spawnObject, this.transform.position, this.transform.rotation);
+        //spawnObject = (GameObject)Resources.Load("Mutant");
+        GameObject go = Instantiate (spawnObject, transform.position, transform.rotation);
         go.GetComponent<ObjectParam>().SetTeam(team);
         GM.CreateEnemy(go);
         go.GetComponent<AIController>().GM = GM;

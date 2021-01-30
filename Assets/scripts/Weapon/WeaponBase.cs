@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WeaponBase : MonoBehaviour {
+public class WeaponBase : MonoBehaviour  {
 
 	public float 			damage;
     public float 			actionTime;
@@ -12,8 +12,8 @@ public class WeaponBase : MonoBehaviour {
     private ObjectParam 			Params;
 
 	// Use this for initialization
-	void Start () {
-		Params = this.GetComponentInParent<ObjectParam>();
+	public void Init () {
+	
 	}
 
 
@@ -67,7 +67,7 @@ public class WeaponBase : MonoBehaviour {
     /*Attack ========================================================================*/
     public bool Attack (GameObject target)
     {
-        if (target && ((Time.time - attackTimer) >= Params.GetAttackSpeed()))
+        if (target && ((Time.time - attackTimer) >= (actionTime + cooldown)))
         {
             if (target.gameObject.GetComponent<BuffList>())
             {

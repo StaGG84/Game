@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{75166CFA-BD13-BD97-9CA4-6DA470B8A6B8}</ProjectGuid>
+    <ProjectGuid>{DDFBC18F-9396-3137-9CFE-DEB2CDB74636}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -58,6 +58,7 @@
     <Compile Include="Assets\scripts\Enemy\AIController.cs" />
     <Compile Include="Assets\scripts\Player\Player.cs" />
     <Compile Include="Assets\scripts\InputController.cs" />
+    <Compile Include="Assets\UI\Battle\ButtonStart.cs" />
     <Compile Include="Assets\scripts\GUI\GUIObjectHealthBar.cs" />
     <Compile Include="Assets\scripts\Weapon\Weapon_Melee.cs" />
     <Compile Include="Assets\scripts\GameManager.cs" />
@@ -67,7 +68,6 @@
     <Compile Include="Assets\scripts\Object\ObjectParam.cs" />
     <Compile Include="Assets\scripts\SceneManager.cs" />
     <Compile Include="Assets\scripts\SpawnPoint.cs" />
-    <Compile Include="Assets\UI\Battle\ButtonStart.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -727,11 +727,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="NavMeshComponents.csproj">
-      <Project>{BFFEB5EE-FC75-2DE2-551A-22A42591F0E2}</Project>
+      <Project>{55B0AF83-8C21-1810-02A4-41A75B7676AE}</Project>
       <Name>NavMeshComponents</Name>
     </ProjectReference>
     <ProjectReference Include="NavMeshComponentsEditor.csproj">
-      <Project>{A1ADA4C5-2FC9-3C33-0B3D-986B057CC537}</Project>
+      <Project>{66798DCE-177E-05B6-43DE-1996C8567D30}</Project>
       <Name>NavMeshComponentsEditor</Name>
     </ProjectReference>
   </ItemGroup>

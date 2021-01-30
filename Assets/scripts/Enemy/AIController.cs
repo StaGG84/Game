@@ -29,7 +29,6 @@ public class AIController : MonoBehaviour {
         m_characterController = GetComponent<CharacterController>();
         m_navMeshAgent = GetComponent<NavMeshAgent>();
         HealthBar = GetComponent<BotHealthBarController>();
-        Weapon = GetComponent<WeaponBase>();
 
         state = States.IDLE;
 
@@ -46,9 +45,6 @@ public class AIController : MonoBehaviour {
     {
         SetAnimSate(States.MOVE);
         m_navMeshAgent.isStopped = false;
-        //Vector3 forvard = transform.TransformDirection(Vector3.forward);
-
-        //m_characterController.Move(forvard * Params.GetMoveSpeed() * Time.deltaTime);
         m_navMeshAgent.SetDestination(trgt.transform.position);
     }
     public void Rotate(Vector3 rotate)
