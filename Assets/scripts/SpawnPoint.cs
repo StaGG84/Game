@@ -4,41 +4,34 @@ using System.Collections;
 public class SpawnPoint : MonoBehaviour {
 
 
-	GameObject spawnObject;
+    public GameManager GM;
+    GameObject spawnObject;
+    private GameManager.Teams team = GameManager.Teams.TEAM1;
 
-	public int spawnCount = 0;
+    public int spawnCount = 0;
 
 	public float spawnTimer = 0;
 	public float spawnInterval = 1;
 
-	private int currentSpawnCount = 0;
+    /*Team ==========================================================================*/
+    public GameManager.Teams GetTeam()
+    {
+        return team;
+    }
+    public void SetTeam(GameManager.Teams i)
+    {
+        team = i;
+    }
+    /*===============================================================================*/
 
 
-	// Use this for initialization
-	void Start () {
-		spawnObject = (GameObject)Resources.Load ("Enemy");
-		spawnTimer = Time.time;
-	}
+    public void SpawnObject (){
+        spawnObject = (GameObject)Resources.Load("Enemy");
+        GameObject go = Instantiate (spawnObject, this.transform.position, this.transform.rotation);
+        go.GetComponent<ObjectParam>().SetTeam(team);
+        GM.CreateEnemy(go);
+        go.GetComponent<AIController>().GM = GM;
+      
+}
 
-	void SpawnObject (){
-		if ((Time.time - spawnTimer) >= spawnInterval) {
-			Instantiate (spawnObject, this.transform.position, this.transform.rotation);
-			spawnTimer = Time.time;
-			currentSpawnCount += 1;
-		}
-	}
-
-
-	// Update is called once per frame
-	void Update () {
-
-		if (spawnCount > 0) {
-			if (spawnCount > currentSpawnCount) {
-				SpawnObject ();
-			} else {
-				this.enabled = false;
-				Debug.Log ("Disable SpawnZone:" + this.name);
-			}
-		}
-	}
 }

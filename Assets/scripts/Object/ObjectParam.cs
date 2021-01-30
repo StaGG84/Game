@@ -4,87 +4,89 @@ using System.Collections.Generic;
 
 public class ObjectParam : MonoBehaviour {
 
-	private float 			 maxHealth 			= 100;
-	private float 			 currentHealth 		= 100;
-	private float 			 moveSpeed 			= 2f;
-	private float 			 runSpeed			= 4f;
-	private float 			 speedMultiplier	= 1f;
-	private float 			 rotateSpeed 		= 3f;
-	private float 			 attackSpeed 		= 1f;
-	private float 			 attackTimer		= 0f;
-	private float 			 AggrRadius  		= 10f;
-	private GameManager.Teams team 				= GameManager.Teams.TEAM1;
-							 
-	private GameObject 		 target;
-	private GameObject 		 weapon;
-							 
-	/*Target ========================================================================*/
-	public GameObject GetTarget(){
-		return target;
-	}
-	public void SetTarget(GameObject go){
-		target = go;
-	}
-	/*===============================================================================*/
+    private float                       maxHealth;
+    private float                       currentHealth;
+    private float                       moveSpeed = 2f;
+    private float                       runSpeed = 4f;
+    private float                       speedMultiplier = 1f;
+    //private float 			        rotateSpeed 		    = 3f;
+    private float                       attackSpeed = 1f;
+    public bool                         isDead = false;
+    private GameManager.Teams           team = GameManager.Teams.TEAM1;
+
+    private float                       corpseLifeTime = 5;
 
 
-	/*Weapon ========================================================================*/
-	public GameObject GetWeapon(){
-		return weapon;
-	}
-	public void SetWeapon(GameObject go){
-		weapon = go;
-	}
-	/*===============================================================================*/
+    private AIController                AICon;
 
 
-	/*===============================================================================*/
-	// Parameter processing
-	/*===============================================================================*/
-
-	void AddjustCurrentHealth ( float adj) {
-		currentHealth = adj;
-
-		if (currentHealth < 0)
-			currentHealth = 0;
-		
-		if (currentHealth > maxHealth)
-			currentHealth = maxHealth;
-
-		if (currentHealth == 0)
-			ObjectDestroy();
-	}
+    private void Start()
+    {
+        AICon = GetComponent<AIController>();
+        
+        SetMaxHealth(Random.Range(100, 300));
+        SetCurrentHealth(GetMaxHealth());
+    }
 
 
-	public void ObjectDestroy() {
-		Debug.Log (this.gameObject);//Destroy (this.gameObject);
-	}
-
-	/*CurrentHealth =================================================================*/
-	public float GetCurrentHealth() {
-		return currentHealth;
-	}
-	public void SetCurrentHealth(float i) {
-		currentHealth = i;
-	}
-	public void AddCurrentHealth(float i) {
-		currentHealth += i;
-	}
-	/*===============================================================================*/
 
 
-	/*MaxHealth =====================================================================*/
-	public float GetMaxHealth() {
-		return maxHealth;
-	}
-	public void SetMaxHealth(float i) {
-		maxHealth = i;
-	}
-	public void AddMaxHealth(float i) {
-		maxHealth += i;
-	}
-	/*===============================================================================*/
+    /*===============================================================================*/
+    // Parameter processing
+    /*===============================================================================*/
 
+    void AddjustCurrentHealth() {
+
+        if (currentHealth < 0)
+            currentHealth = 0;
+
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+
+        if (currentHealth == 0)
+        {
+            isDead = true;
+            AICon.ObjectIsDead();
+        }
+
+    }
+
+
+
+
+
+    /*CurrentHealth =================================================================*/
+    public float GetCurrentHealth() {
+        return currentHealth;
+    }
+    public void SetCurrentHealth(float i) {
+        currentHealth = i;
+        AICon.ChangeHealth();
+        AddjustCurrentHealth();
+    }
+    public void AddCurrentHealth(float i) {
+        currentHealth += i;
+        AICon.ChangeHealth();
+        AddjustCurrentHealth();
+    }
+    /*===============================================================================*/
+
+
+
+    /*MaxHealth =====================================================================*/
+    public float GetMaxHealth() {
+        return maxHealth;
+    }
+    public void SetMaxHealth(float i) {
+        maxHealth = i;
+        AICon.ChangeHealth();
+    }
+    public void AddMaxHealth(float i) {
+        maxHealth += i;
+        AICon.ChangeHealth();
+    }
+    /*===============================================================================*/
+    
 
 	/*MoveSpeed =====================================================================*/
 	public float GetMoveSpeed() {
@@ -114,25 +116,13 @@ public class ObjectParam : MonoBehaviour {
 
 	/*AttackSpeed ===================================================================*/
 	public float GetAttackSpeed() {
-		return moveSpeed;
+		return attackSpeed;
 	}
 	public void SetAttackSpeed(float i) {
-		moveSpeed = i;
+        attackSpeed = i;
 	}
 	public void AddAttackSpeed(float i) {
-		moveSpeed += i;
-	}
-	/*===============================================================================*/
-
-	/*AttackTimer ===================================================================*/
-	public float GetAttackTimer() {
-		return attackTimer;
-	}
-	public void SetAttackTimer(float i) {
-		attackTimer = i;
-	}
-	public void AddAttackTimer(float i) {
-		attackTimer += i;
+        attackSpeed += i;
 	}
 	/*===============================================================================*/
 
@@ -147,47 +137,23 @@ public class ObjectParam : MonoBehaviour {
 	/*===============================================================================*/
 
 
-	/*Attack ========================================================================*/
-	public void Attack() {
-		if((Time.time-attackTimer) >= attackSpeed){
-			Instantiate (weapon,transform,false);
-			attackTimer = Time.time;
-		}
-	}
-	/*===============================================================================*/
+    /*isDead? ========================================================================*/
+    public bool GetIsDead()
+    {
+        return isDead;
+    }
+    /*===============================================================================*/
 
 
-	/*Movement And Rotation =========================================================*/
-	public void ActivateMoveSpeed () {
-		speedMultiplier = moveSpeed;
-	}
+    /*CorpseLifeTime ==========================================================================*/
+    public float GetCorpseLifeTime()
+    {
+        return corpseLifeTime;
+    }
+    public void SetCorpseLifeTime(float i)
+    {
+        corpseLifeTime = i;
+    }
+    /*===============================================================================*/
 
-	public void ActivateRunSpeed () {
-		speedMultiplier = runSpeed;
-	}
-
-	public void Move (Vector3 move) {
-		this.transform.Translate(move*speedMultiplier*Time.deltaTime);
-	}
-
-	public void Rotate (Vector3 rotate) {
-		transform.Rotate (rotate * Input.GetAxis("Mouse X")*rotateSpeed);
-	}
-
-	public void LookAtTarget (){
-		this.transform.LookAt (target.transform);
-	}
-	/*===============================================================================*/
-
-
-	// Use this for initialization
-	void Avake () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		AddjustCurrentHealth (currentHealth);
-
-
-	}
 }
