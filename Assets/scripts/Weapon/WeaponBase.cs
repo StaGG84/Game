@@ -9,12 +9,25 @@ public class WeaponBase : MonoBehaviour  {
     public float            range;
     public float            attackTimer;
 
-    private ObjectParam 			Params;
+    public ObjectParam 			Params;
 
-	// Use this for initialization
-	public void Init () {
-	
-	}
+    // Use this for initialization
+
+    void Start() {
+        damage = 10f;
+        actionTime = 0.5f;
+        cooldown = 0.5f;
+        range = 3f;
+        attackTimer = 0f;
+        Params = GetComponent<ObjectParam>();
+
+    }
+    
+    
+    public void Init () {
+        
+
+    }
 
 
     /*Range =========================================================================*/

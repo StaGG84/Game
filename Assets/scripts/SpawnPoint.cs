@@ -6,7 +6,7 @@ public class SpawnPoint : MonoBehaviour {
 
     public GameManager GM;
     public GameObject spawnObject;
-    private GameManager.Teams team = GameManager.Teams.TEAM1;
+    public GameManager.Teams team = GameManager.Teams.TEAM1;
 
     public int spawnCount = 0;
 
@@ -24,6 +24,9 @@ public class SpawnPoint : MonoBehaviour {
     }
     /*===============================================================================*/
 
+    void Start() {
+        SpawnObject();
+    }
 
     public void SpawnObject (){
         //spawnObject = (GameObject)Resources.Load("Mutant");

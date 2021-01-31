@@ -38,7 +38,7 @@ ModelImporter:
       name: Mutant_Anim_Dead
       takeName: mixamo.com
       internalID: 0
-      firstFrame: 0
+      firstFrame: 30
       lastFrame: 138
       wrapMode: 0
       orientationOffsetY: 0

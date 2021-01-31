@@ -7,9 +7,6 @@ public class ObjectParam : MonoBehaviour {
     private float                       maxHealth;
     private float                       currentHealth;
     private float                       moveSpeed = 2f;
-    private float                       runSpeed = 4f;
-    private float                       speedMultiplier = 1f;
-    //private float 			        rotateSpeed 		    = 3f;
     private float                       attackSpeed = 1f;
     public bool                         isDead = false;
     private GameManager.Teams           team = GameManager.Teams.TEAM1;

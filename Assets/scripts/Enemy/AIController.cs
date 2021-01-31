@@ -7,18 +7,20 @@ public class AIController : MonoBehaviour {
 
     public GameManager GM;
     ObjectParam Params;
-    public WeaponBase Weapon;
+    private WeaponBase Weapon;
     public GameObject Target;
     private bool bt_enable = true;
     private CharacterController m_characterController;
     private NavMeshAgent m_navMeshAgent;
 
-    public enum States { IDLE, MOVE, ATTACK, DEAD };
+    public enum States { IDLE = 1, MOVE = 2, ATTACK = 3, DEAD = 0 };
     public States state = States.IDLE;
 
     public Material material;
     public Animator anim;
     private BotHealthBarController HealthBar;
+
+    public List<GameObject> ModelList = new List<GameObject>();
 
 
 
@@ -29,6 +31,7 @@ public class AIController : MonoBehaviour {
         m_characterController = GetComponent<CharacterController>();
         m_navMeshAgent = GetComponent<NavMeshAgent>();
         HealthBar = GetComponent<BotHealthBarController>();
+        Weapon = GetComponent<WeaponBase>();
 
         state = States.IDLE;
 
@@ -38,12 +41,31 @@ public class AIController : MonoBehaviour {
         material = GetComponent<Renderer>().material;
 
         ChangeHealth();
+        SetModel();
+
+
 
     }
 
+    void SetModel() {
+
+        GameObject slaveModel = Instantiate(ModelList[Random.Range(0, ModelList.Count)]);
+        slaveModel.transform.SetParent(transform);
+        slaveModel.transform.localPosition = new  Vector3 (0, 0, 0);
+
+        anim = slaveModel.GetComponent<Animator>();
+
+    }
+
+    void SetState(States botState)
+    {
+        state = botState;
+        anim.SetInteger("STATE", (byte) botState);
+    }
+    
     public void Move(GameObject trgt)
     {
-        SetAnimSate(States.MOVE);
+        SetState(States.MOVE);
         m_navMeshAgent.isStopped = false;
         m_navMeshAgent.SetDestination(trgt.transform.position);
     }
@@ -57,11 +79,11 @@ public class AIController : MonoBehaviour {
     public void Attack() {
         LookAtTarget(Target);
         m_navMeshAgent.isStopped = true;
-        if (Weapon.Attack(Target)) SetAnimSate(States.ATTACK);
+        if (Weapon.Attack(Target)) SetState(States.ATTACK);
     }
     public void Dead() {
         bt_enable = false;
-        SetAnimSate(States.DEAD);
+        SetState(States.DEAD);
         StartCoroutine(ObjectDestroy());
         IEnumerator ObjectDestroy()
         {
@@ -72,48 +94,10 @@ public class AIController : MonoBehaviour {
     }
     public void Stay()
     {
-        SetAnimSate(States.IDLE);
+        SetState(States.IDLE);
         m_navMeshAgent.isStopped = true;
     }
 
-    void SetAnimSate(States stt) {
-        state = stt;
-        switch (stt)
-        {
-            case States.IDLE:
-                anim.SetBool("IDLE", true);
-                anim.SetBool("MOVE", false);
-                anim.SetBool("ATTACK", false);
-                anim.SetBool("DEAD", false);
-                Debug.Log("IDLE");
-                break;
-            case States.MOVE:
-                anim.SetBool("IDLE", false);
-                anim.SetBool("MOVE", true);
-                anim.SetBool("ATTACK", false);
-                anim.SetBool("DEAD", false);
-                Debug.Log("MOVE");
-                break;
-            case States.ATTACK:
-                anim.SetBool("IDLE", false);
-                anim.SetBool("MOVE", false);
-                anim.SetBool("ATTACK", true);
-                anim.SetBool("DEAD", false);
-                Debug.Log("ATTACK");
-                break;
-            case States.DEAD:
-                anim.SetBool("IDLE", false);
-                anim.SetBool("MOVE", false);
-                anim.SetBool("ATTACK", false);
-                anim.SetBool("DEAD", true);
-                Debug.Log("DEAD");
-                break;
-            default:
-                break;
-        }
-
-
-    }
 
     void SetTeamColor()
     {

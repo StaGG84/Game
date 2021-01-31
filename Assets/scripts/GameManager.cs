@@ -18,9 +18,9 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        SpawnPoint = (GameObject)Resources.Load("SpawnPoint");
+        //SpawnPoint = (GameObject)Resources.Load("SpawnPoint");
         currentGameState = GameState.PREROUND;
-        CreateSpawnPoint ();
+        //CreateSpawnPoint ();
         currentGameState = GameState.BATTLE;
 
     }

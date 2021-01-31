@@ -13,6 +13,7 @@ public class Weapon_Melee : WeaponBase
             cooldown        = 0.5f;
             range           = 3f;
             attackTimer     = 0f;
+            Params = GetComponent<ObjectParam>();
             Init();
     }
 
