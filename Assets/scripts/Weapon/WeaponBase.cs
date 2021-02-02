@@ -1,96 +1,57 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WeaponBase : MonoBehaviour  {
+public class WeaponBase {
 
-	public float 			damage;
-    public float 			actionTime;
-    public float 			cooldown;
-    public float            range;
+    float       m_damage;
+    float       m_actiontime;
+    float       m_cooldown;
+    float       m_range;
+    float       m_shotdelay;
+    bool        m_canMove;
+
+
+
+
+    public float Damage             { get { return m_damage; } }
+    public float ActionTime         { get { return m_actiontime; } }
+    public float Cooldown           { get { return m_cooldown; } }
+    public float Range              { get { return m_range; } }
+    public float ShotDelay          { get { return m_shotdelay; } }
+    public float AttackSpeed        { get { return m_actiontime + m_cooldown; } }
+    public bool CanMove             { get { return m_canMove; } }
+
     public float            attackTimer;
 
     public ObjectParam 			Params;
 
     // Use this for initialization
 
-    void Start() {
-        damage = 10f;
-        actionTime = 0.5f;
-        cooldown = 0.5f;
-        range = 3f;
-        attackTimer = 0f;
-        Params = GetComponent<ObjectParam>();
-
-    }
-    
-    
-    public void Init () {
-        
+  
+    public void Init (ObjectParam ownerParam) {
+        Params          = ownerParam;
+        m_damage        = 10;
+        m_actiontime    = 2;
+        m_cooldown      = 0;
+        m_range         = 3;
+        m_shotdelay     = 1;
+        m_canMove       = false;
 
     }
 
 
-    /*Range =========================================================================*/
-    public float GetRange()
+/*Attack ========================================================================*/
+public bool CreateBullet(GameObject target)
     {
-        return range;
-    }
-    public void SetRange(float i)
-    {
-        range = i;
-    }
-    public void AddRange(float i)
-    {
-        range += i;
-    }
-    /*===============================================================================*/
-
-    /*ActionTime =========================================================================*/
-    public float GetActionTime()
-    {
-        return actionTime;
-    }
-    public void SetActionTime(float i)
-    {
-        actionTime = i;
-    }
-    public void AddActionTime(float i)
-    {
-        actionTime += i;
-    }
-    /*===============================================================================*/
-
-    /*ActionTime =========================================================================*/
-    public float GetCooldown()
-    {
-        return cooldown;
-    }
-    public void SetCooldown(float i)
-    {
-        cooldown = i;
-    }
-    public void AddCooldown(float i)
-    {
-        cooldown += i;
-    }
-    /*===============================================================================*/
-
-
-
-    /*Attack ========================================================================*/
-    public bool Attack (GameObject target)
-    {
-        if (target && ((Time.time - attackTimer) >= (actionTime + cooldown)))
+        if (target.gameObject.GetComponent<BuffList>())
         {
-            if (target.gameObject.GetComponent<BuffList>())
-            {
-                target.gameObject.GetComponent<BuffList>().AddBuff(Params, BuffList.Buff.EBuffType.HP, BuffList.Buff.ETargetTeam.ENEMY, -damage, 0, 0);
-            }
-            attackTimer = Time.time;
+            target.gameObject.GetComponent<BuffList>().AddBuff(Params, BuffList.Buff.EBuffType.HP, BuffList.Buff.ETargetTeam.ENEMY, -Damage, 0, 0);
             return true;
         }
-        else { return false; }
+        else
+        {
+            return false;
+        }
     }
-    /*===============================================================================*/
 
 }

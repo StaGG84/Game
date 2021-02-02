@@ -5,22 +5,29 @@ using System.Collections.Generic;
 
 public class AIController : MonoBehaviour {
 
-    public GameManager GM;
-    ObjectParam Params;
-    private WeaponBase Weapon;
-    public GameObject Target;
-    private bool bt_enable = true;
-    private CharacterController m_characterController;
-    private NavMeshAgent m_navMeshAgent;
+    public enum States
+    {
+        IDLE = 1,
+        MOVE = 2,
+        ATTACK = 3,
+        DEAD = 0
+    };
 
-    public enum States { IDLE = 1, MOVE = 2, ATTACK = 3, DEAD = 0 };
-    public States state = States.IDLE;
 
-    public Material material;
-    public Animator anim;
-    private BotHealthBarController HealthBar;
+    public GameManager                        GM;
+    ObjectParam                               Params;
+    WeaponController                          WeaponCon;
+    public GameObject                         Target;
+    private bool                              bt_enable = true;
+    private CharacterController               m_characterController;
+    private NavMeshAgent                      m_navMeshAgent;
+    public States                             state = States.IDLE;
 
-    public List<GameObject> ModelList = new List<GameObject>();
+    public Material                           material;
+    public Animator                           anim;
+    private BotHealthBarController            HealthBar;
+
+    public List<GameObject>                   ModelList = new List<GameObject>();
 
 
 
@@ -31,20 +38,15 @@ public class AIController : MonoBehaviour {
         m_characterController = GetComponent<CharacterController>();
         m_navMeshAgent = GetComponent<NavMeshAgent>();
         HealthBar = GetComponent<BotHealthBarController>();
-        Weapon = GetComponent<WeaponBase>();
+        
+        WeaponCon = GetComponent<WeaponController>();
+        WeaponCon.Init();
 
         state = States.IDLE;
 
-        Params.SetRunSpeed(Params.GetMoveSpeed() * 2f);
-        Params.SetAttackSpeed(Weapon.GetCooldown() + Weapon.GetActionTime());
-
         material = GetComponent<Renderer>().material;
-
         ChangeHealth();
         SetModel();
-
-
-
     }
 
     void SetModel() {
@@ -79,7 +81,14 @@ public class AIController : MonoBehaviour {
     public void Attack() {
         LookAtTarget(Target);
         m_navMeshAgent.isStopped = true;
-        if (Weapon.Attack(Target)) SetState(States.ATTACK);
+        
+        if (Target)
+        {
+            WeaponCon.Attack(Target);
+            //if (WeaponCon.IsInFire)
+                SetState(States.ATTACK);
+        }
+           
     }
     public void Dead() {
         bt_enable = false;
@@ -158,9 +167,9 @@ public class AIController : MonoBehaviour {
             GetNewTarget();
             return;
         }
-
-        if ((Vector3.Distance(transform.position, Target.transform.position) > Weapon.GetRange())) // Не дотягиваемся - идем
-            MoveTo(Target);
+        
+        if ((Vector3.Distance(transform.position, Target.transform.position) > WeaponCon.Range)) // Не дотягиваемся - идем
+            { MoveTo(Target); /*Debug.Log("WeaponCon.Range = " + WeaponCon.Range);*/ }
         else // Дотягиваемся - бьем
             Attack();
     }
@@ -181,6 +190,7 @@ public class AIController : MonoBehaviour {
     void Update () {
         BehaviourTree();
         SetTeamColor();
+        
     }
 
 

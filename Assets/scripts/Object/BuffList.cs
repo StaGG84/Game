@@ -28,24 +28,14 @@ public class BuffList : MonoBehaviour {
 
 	private void AddBuffToBuffList (Buff newBuff){
 
-		bool applyBuff = false;
+		Debug.Log("Caster = " + newBuff.caster);
 
-		if ((newBuff.caster.GetTeam() == Params.GetTeam()) | (newBuff.buffTargetTeam == Buff.ETargetTeam.FRIEND)) {
-			applyBuff = true;
-		}
+		if (!((newBuff.caster.GetTeam() == Params.GetTeam()) | (newBuff.buffTargetTeam == Buff.ETargetTeam.FRIEND)) &&
+			!((newBuff.caster.GetTeam() != Params.GetTeam()) | (newBuff.buffTargetTeam == Buff.ETargetTeam.ENEMY))	&&
+			!((newBuff.buffTargetTeam == Buff.ETargetTeam.ALL)))
+			return;
 
-		if ((newBuff.caster.GetTeam() != Params.GetTeam()) | (newBuff.buffTargetTeam == Buff.ETargetTeam.ENEMY)) {
-			applyBuff = true;
-		}
-
-		if ((newBuff.buffTargetTeam == Buff.ETargetTeam.ALL)) {
-			applyBuff = true;
-		}
-
-		if (applyBuff) {
-			buffList.Add (newBuff);
-		}
-
+		buffList.Add (newBuff);
 
 	}
 

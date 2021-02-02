@@ -28,7 +28,7 @@ public class InputController : MonoBehaviour {
 
 		//Params.Rotate (Vector3.up);
 
-		if(Input.GetMouseButtonDown (0))	Weapon.Attack (this.gameObject);
+		//if(Input.GetMouseButtonDown (0))	Weapon.Attack (this.gameObject);
 
 		if(Input.GetKey (KeyCode.Escape)) 	Application.Quit();
 	}
